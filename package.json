@@ -1,7 +1,7 @@
 {
-  "name": "electron-react-template",
+  "name": "pinza-dashboard",
   "version": "0.0.1",
-  "description": "A light-weight template for createing Electron App within React",
+  "description": "React + Electron based interface for pinza",
   "main": "./dist/main.prod.js",
   "scripts": {
     "clear": "rm -rf ./dist",
@@ -17,11 +17,10 @@
   "keywords": [
     "electron",
     "react",
-    "boilerplate",
-    "template"
+    "pinza"
   ],
-  "author": "SmallStoneSK",
-  "license": "MIT",
+  "author": "vaultec81",
+  "license": "GPLv3",
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
@@ -48,8 +47,15 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "@trendmicro/react-sidenav": "^0.5.0",
+    "bootstrap": "^4.5.0",
     "electron-packager": "^14.2.1",
-    "react": "^16.8.5",
-    "react-dom": "^16.8.5"
+    "go-ipfs-dep": "^0.5.1",
+    "orbit-db-identity-provider": "^0.3.0",
+    "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
+    "react-dom": "^16.8.5",
+    "react-icons": "^3.10.0",
+    "react-router-dom": "^5.2.0"
   }
 }

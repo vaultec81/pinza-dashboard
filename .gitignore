@@ -15,3 +15,6 @@ dist/
 
 # Package release directory
 build/
+
+# IPFS dep
+ipfs*
