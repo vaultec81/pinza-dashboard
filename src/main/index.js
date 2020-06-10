@@ -8,7 +8,10 @@ const entryUrl = process.env.NODE_ENV === 'development'
 let window = null;
 
 app.on('ready', () => {
-  window = new BrowserWindow({width: 800, height: 600, webPreferences: {webSecurity: false}});
+  window = new BrowserWindow({width: 800, height: 600, webPreferences: {
+    webSecurity: false,
+    nodeIntegration: true
+  }});
   window.loadURL(entryUrl);
   window.on('closed', () => window = null);
 });

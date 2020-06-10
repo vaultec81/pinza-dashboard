@@ -7,7 +7,7 @@
     "clear": "rm -rf ./dist",
     "dev": "npm run start-renderer",
     "prod": "run-electron .",
-    "package": "npm run build && electron-packager . --out=build",
+    "package": "npm run build && electron-packager . --overwrite --out=build",
     "build": "npm run clear && npm-run-all --parallel build-main build-renderer",
     "build-main": "webpack --config webpack/main.config.js",
     "build-renderer": "webpack --config webpack/renderer.prod.config.js",
@@ -23,6 +23,7 @@
   "license": "GPLv3",
   "devDependencies": {
     "@babel/core": "^7.4.0",
+    "@babel/plugin-transform-runtime": "^7.10.1",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",

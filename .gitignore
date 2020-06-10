@@ -17,4 +17,4 @@ dist/
 build/
 
 # IPFS dep
-ipfs*
+ipfs.cmd

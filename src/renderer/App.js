@@ -1,5 +1,6 @@
 import React from 'react';
 import Sidebar from './components/Sidebar';
+import IpfsHelper from './components/IpfsHelper';
 import { Navbar, NavDropdown, Nav, Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
@@ -21,7 +22,7 @@ export class App extends React.PureComponent {
   render() {
     return (
       <div>
-        <Sidebar />
+        <Sidebar/>
         <Container style={{marginLeft: "64px", padding: "15px 20px 0px"}}>
           <HashRouter>
             <Switch>
@@ -37,6 +38,7 @@ export class App extends React.PureComponent {
             </Switch>
           </HashRouter>
         </Container>
+        <IpfsHelper/>
       </div>
     );
   }
