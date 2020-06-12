@@ -3,7 +3,8 @@ const os = require('os');
 const fs = require('fs')
 const IpfsClient = require('ipfs-http-client')
 const { exec, spawn } = require('child_process');
-const path = require('path')
+const path = require('path');
+const { HTTPClient:PinzaClient } = require('pinza')
 //const goIpfs = require('go-ipfs-dep')
 
 
@@ -73,7 +74,53 @@ async function getIpfs() {
         apiAddr
     }
 }
-var ipfsApi = {
+
+async function getPinza() {
+    let pinzaPath;
+    if (process.env.Pinza_Path) {
+        pinzaPath = process.env.Pinza_Path;
+    } else {
+        pinzaPath = Path.join(os.homedir(), ".js-pinza")
+    }
+
+    let exists;
+    let apiAddr;
+    let isLocked;
+    let pinza;
+    if (fs.existsSync(pinzaPath)) {
+        exists = true;
+        if (fs.existsSync(Path.join(pinzaPath, "apiAddr"))) {
+            apiAddr = fs.readFileSync(Path.join(pinzaPath, "apiAddr")).toString()
+        }
+        if (fs.existsSync(Path.join(pinzaPath, "repo.lock"))) {
+            isLocked = true;
+        } else {
+            isLocked = false;
+        }
+    } else {
+        exists = false;
+    }
+
+
+    if (apiAddr) {
+        pinza = new PinzaClient(apiAddr);
+        try {
+            await pinza.config.get("")
+        } catch {
+            pinza = null;
+        }
+    }
+
+    return {
+        isLocked,
+        exists,
+        pinzaPath,
+        pinza,
+        apiAddr
+    }
+}
+
+var defaultIpfsConfig = {
     "HTTPHeaders": {
         "Access-Control-Allow-Credentials": [
             "true"
@@ -107,8 +154,8 @@ export default {
                         IPFS_Path: repoPath
                     }
                 }, () => {
-                    console.log(`${goIpfsPath} config --json API ${JSON.stringify(JSON.stringify(ipfsApi))}`)
-                    exec(`${goIpfsPath} config --json API ${JSON.stringify(JSON.stringify(ipfsApi))}`, {
+                    //console.log(`${goIpfsPath} config --json API ${JSON.stringify(JSON.stringify(defaultIpfsConfigs))}`)
+                    exec(`${goIpfsPath} config --json API ${JSON.stringify(JSON.stringify(defaultIpfsConfig))}`, {
                         env: {
                             IPFS_Path: repoPath
                         }
@@ -122,16 +169,17 @@ export default {
             if (!goIpfsPath) {
                 goIpfsPath = goIpfs;
             }
-            console.log(goIpfs.path.silent())
-            spawn(goIpfsPath, [
+            var ipfsDaemon = spawn(goIpfsPath, [
                 "daemon",
                 "--enable-pubsub-experiment"
             ], {
-                    env: {
-                        IPFS_Path: repoPath
-                    }
-                });
-
+                env: {
+                    IPFS_Path: repoPath
+                },
+                detached: true
+            });
+            return ipfsDaemon.pid;
         }
-    }
+    },
+    getPinza
 }

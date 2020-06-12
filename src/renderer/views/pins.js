@@ -18,7 +18,7 @@ class Pins extends React.Component {
                             <Form.Label className="my-1 mr-2">
                                 Cluster: 
                             </Form.Label>
-                            <Form.Control className="my-1 mr-sm-2" srOnly as="select" onChange={this.selectCluster}>
+                            <Form.Control className="my-1 mr-sm-2" sronly as="select" onChange={this.selectCluster}>
                                 {
                                     //Generate options dynamically here
                                 }
@@ -26,7 +26,6 @@ class Pins extends React.Component {
                                     MyCluster
                                 </option>
                             </Form.Control>
-                            
                         </Form>
                     </Col>
                     <Col>
@@ -37,9 +36,10 @@ class Pins extends React.Component {
                     </Col>
                 </Row>
             </Container>
-            <Table compact>
+            <Table compact={true}>
                 <thead>
                     <tr>
+                        <th style={{display:"none"}}>Select</th>
                         <th>CID</th>
                         <th>Meta</th>
                         <th>Size</th>
@@ -47,6 +47,10 @@ class Pins extends React.Component {
                 </thead>
                 <tbody>
                     <tr>
+                        <td  style={{textAlign:"center", display:"none"}}>
+                            <input type="checkbox">
+                            </input>
+                        </td>
                         <td>
                             Qmc9bfk2r3Fpgza7CaLLTCLHezTErenEG6EA2dQH24D5th
                         </td>
