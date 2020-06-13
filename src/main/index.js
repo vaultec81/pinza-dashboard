@@ -1,5 +1,6 @@
 import path from 'path';
 import {app, BrowserWindow} from 'electron';
+import pinzaManager from './pinzaManager'
 
 const entryUrl = process.env.NODE_ENV === 'development'
   ? 'http://localhost:6789/index.html'
@@ -21,3 +22,4 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+new pinzaManager();

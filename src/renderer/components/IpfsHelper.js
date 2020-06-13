@@ -1,6 +1,11 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap'
 import utils from '../../main/utils'
+import fs from 'fs'
+import Path from 'path'
+import os from 'os'
+import { EventEmitter } from 'events';
+import promiseIpc from 'electron-promise-ipc'
 
 class IpfsHelper extends React.Component {
     constructor(props) {
@@ -27,6 +32,15 @@ class IpfsHelper extends React.Component {
         this.setState({
             installPrompt: false
         })
+    }
+    static async startIpfs() {
+        fs.writeFileSync(Path.join(os.tmpdir(), "ipfs.pid"), await utils.ipfs.run());
+        await promiseIpc.send("pinza.start");
+    }
+    static async stopIpfs() {
+        IpfsHelper.events.emit("ipfs.stopping")
+        await promiseIpc.send("pinza.stop");
+        process.kill(Number(fs.readFileSync(Path.join(os.tmpdir(), "ipfs.pid"))))
     }
     render() {
         return <div>
@@ -60,4 +74,5 @@ class IpfsHelper extends React.Component {
         </div>
     }
 }
+IpfsHelper.events = new EventEmitter();
 export default IpfsHelper;
