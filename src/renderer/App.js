@@ -35,6 +35,9 @@ export class App extends React.PureComponent {
               <Route path="/settings">
                 <views.settings />
               </Route>
+              <Route path="/home">
+                <views.home />
+              </Route>
             </Switch>
           </HashRouter>
         </Container>
