@@ -11,6 +11,8 @@ import {
   HashRouter
 } from "react-router-dom";
 import views from './views'
+import Popup from 'react-popup';
+import './assets/popup.css'
 
 
 export class App extends React.PureComponent {
@@ -42,6 +44,7 @@ export class App extends React.PureComponent {
           </HashRouter>
         </Container>
         <IpfsHelper/>
+        <Popup/>
       </div>
     );
   }
