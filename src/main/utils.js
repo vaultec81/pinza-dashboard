@@ -181,5 +181,12 @@ export default {
             return ipfsDaemon.pid;
         }
     },
-    getPinza
+    getPinza,
+    formToObj: (formData) => {
+        let out = {};
+        for(var key of formData.keys()) {
+            out[key] = formData.get(key);
+        }
+        return out;
+    }
 }
