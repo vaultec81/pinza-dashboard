@@ -20,10 +20,19 @@ class IpfsHelper extends React.Component {
     }
     async componentDidMount() {
         this.ipfsInfo = await utils.ipfs.getIpfs();
+        var pinzaInfo = await utils.getPinza();
         if(!this.ipfsInfo.exists) {
             this.setState({
                 installPrompt: true
             })
+        } else {
+            if(this.ipfsInfo.ipfs && !pinzaInfo.pinza) {
+                await promiseIpc.send("pinza.start")
+            }
+            let config = JSON.parse(fs.readFileSync(Path.join(pinzaInfo.pinzaPath, "config")).toString())
+            if(config.ipfs.autoStart === true) {
+                await IpfsHelper.startIpfs();
+            }
         }
     }
     async initializeIpfs() {
@@ -35,12 +44,17 @@ class IpfsHelper extends React.Component {
     }
     static async startIpfs() {
         fs.writeFileSync(Path.join(os.tmpdir(), "ipfs.pid"), await utils.ipfs.run());
-        await promiseIpc.send("pinza.start");
+        setTimeout(() => promiseIpc.send("pinza.start"), 5000);
     }
     static async stopIpfs() {
         IpfsHelper.events.emit("ipfs.stopping")
-        await promiseIpc.send("pinza.stop");
-        process.kill(Number(fs.readFileSync(Path.join(os.tmpdir(), "ipfs.pid"))))
+        //promiseIpc.send("pinza.stop"); 
+        try {
+            process.kill(Number(fs.readFileSync(Path.join(os.tmpdir(), "ipfs.pid"))))
+            fs.unlinkSync(Path.join(os.tmpdir(), "ipfs.pid"))
+        } catch {
+
+        }
     }
     render() {
         return <div>

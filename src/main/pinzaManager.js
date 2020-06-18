@@ -3,7 +3,8 @@ const pinzaUtils = require('pinza/src/cli/utils');
 const { ipcMain } = require('electron');
 const promiseIpc = require('electron-promise-ipc');
 const debug = require('debug');
-const utils = require('./utils')
+const utils = require('./utils').default;
+const fs = require('fs');
 
 class pinzaManager {
     constructor() {
@@ -15,6 +16,8 @@ class pinzaManager {
             debug("stop requested for pinza")
             return await this.stop();
         })
+        this.start = this.start.bind(this);
+        this.stop = this.stop.bind(this);
     }
     start() { 
         return new Promise(async(resolve, reject) => {
@@ -24,17 +27,23 @@ class pinzaManager {
                 return reject("Ipfs not running")
             }
 
-            this.daemon = new Daemon(ipfs, {
+            this.daemon = new Daemon({
                 repoPath: pinzaUtils.getRepoPath()
             })
+            if(!fs.existsSync(pinzaUtils.getRepoPath())) {
+                this.daemon.client.init()
+            }
             await this.daemon.start();
-            this._apiEndpoints((apiAddr) => {
+            this.daemon._apiEndpoints((apiAddr) => {
                 return resolve(apiAddr);
             })
         })
     }
     async stop() {
-        await this.daemon.stop();
+        //Error prevention if daemon is not running
+        if(this.daemon) {
+            await this.daemon.stop();
+        }
     }
 }
-module.exports = pinzaManager;
+export default pinzaManager;
