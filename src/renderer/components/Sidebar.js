@@ -56,9 +56,6 @@ class Sidebar extends React.PureComponent {
                                 Settings
                             </NavText>
                         </NavItem>
-                        <Button variant="danger" disabled block size="lg">
-                            IPFS
-                        </Button>
                     </SideNav.Nav>
                 </SideNav>
             </Container>
