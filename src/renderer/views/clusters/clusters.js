@@ -8,6 +8,9 @@ import {
 import { AiOutlinePlus } from 'react-icons/ai'
 import utils from '../../../main/utils'
 import PrettyBytes from 'pretty-bytes'
+import ClusterCreate from '../../components/ClusterCreate'
+import ClusterJoin from '../../components/ClusterJoin'
+import Popup from 'react-popup'
 
 class Clusters extends React.Component {
     constructor(props) {
@@ -20,6 +23,8 @@ class Clusters extends React.Component {
         window.onhashchange = () => {
             this.generateBreadcrumb()
         }
+        this.createCluster = this.createCluster.bind(this)
+        this.joinCluster = this.joinCluster.bind(this)
     }
     componentDidMount() {
         this.generateBreadcrumb();
@@ -56,7 +61,7 @@ class Clusters extends React.Component {
                     var pinls = await clsterInstance.pin.ls({size:true});
                     NumberOfPins = pinls.length;
                     for(var pin of pinls) {
-                        clusterSize =+ pin.size;
+                        clusterSize += pin.size;
                     }
                 } catch {
 
@@ -97,10 +102,33 @@ class Clusters extends React.Component {
         location.hash = `#/clusters/${name}`
     }
     createCluster() {
-
+        var This = this;
+        /** Prompt plugin */
+        Popup.registerPlugin('prompt', function () {
+            this.create({
+                title: '',
+                content: <ClusterCreate onHide={() => {
+                    Popup.close();
+                    This.generateClusterlist()
+                }}/>
+            });
+        });
+        Popup.plugins().prompt();
     }
     joinCluster() {
-
+        var This = this;
+        /** Prompt plugin */
+        Popup.registerPlugin('prompt', function () {
+            this.create({
+                title: '',
+                content: <ClusterJoin onHide={() => {
+                    Popup.close();
+                    This.generateClusterlist()
+                }}/>
+            });
+        });
+        Popup.plugins().prompt();
+        
     }
     render() {
         return <div>
